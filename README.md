@@ -1,2 +1,12 @@
-# lake-admin-addon-database
-lake-admin-addon-database
+### 数据库管理插件
+
+
+## 项目介绍
+
+*  基于lake-admin的数据库管理插件
+
+
+## 开源协议
+
+*  lake遵循Apache2开源协议发布
+*  部分代码来自于网络，请遵循代码原始版权
