@@ -2,7 +2,7 @@
 
 namespace app\database\lib;
 
-use think\Db;
+use think\facade\Db;
 
 //数据导出模型
 class Database
@@ -115,7 +115,7 @@ class Database
     public function backup($table, $start)
     {
         //创建DB对象
-        $db = \think\Db::connect();
+        $db = \think\facade\Db::connect();
 
         //备份表结构
         if (0 == $start) {
@@ -167,7 +167,7 @@ class Database
     public function import($start)
     {
         //还原数据
-        $db = \think\Db::connect();
+        $db = \think\facade\Db::connect();
 
         if ($this->config['compress']) {
             $gz = gzopen($this->file[1], 'r');

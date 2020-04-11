@@ -20,6 +20,10 @@
 {block name="layui"}{/block}
 
 {block name="script"}
+<script type="text/html" id="info">
+    <div class="table-action table-{{ d.name }}">未备份</div>
+</script>
+
 <script>
 layui.use(['table', 'form'], function() {
     var table = layui.table,
@@ -39,7 +43,7 @@ layui.use(['table', 'form'], function() {
                 { field: 'data_length', width: 120, title: '数据大小', templet: '#size' },
                 { field: 'create_time', width: 200, title: '创建时间' },
                 { field: 'comment', title: '说明' },
-                { field: 'info', width: 200, title: '备份状态', templet: '<div>未备份</div>' },
+                { field: 'info', width: 200, title: '备份状态', templet: '#info' },
             ]
         ],
     });
@@ -80,12 +84,12 @@ layui.use(['table', 'form'], function() {
         });
         $export.parent().children().addClass("layui-btn-disabled");
         $export.html("<i class='icon iconfont icon-fasong'></i>正在发送备份请求...");
-        $.post("{:url('admin/database/export',['isadmin'=>1])}", { tables: a },
+        $.post("{:url('admin/database/export')}", { tables: a },
             function(data) {
                 if (data.code) {
                     tables = data.data.tables;
                     $export.html(data.msg + "开始备份，请不要关闭本页面！");
-                    backup(data.data.tab);
+                    backup(data.data.tab, 1, tables[0]);
                     window.onbeforeunload = function() { return "正在备份数据库，请不要关闭！" }
                 } else {
                     layer.msg(data.msg, { icon: 5 });
@@ -98,18 +102,18 @@ layui.use(['table', 'form'], function() {
         return false;
     });
 
-    function backup(tab, code) {
-        code && showmsg(tab.id, "开始备份...(0%)");
-        $.get("{:url('admin/database/export',['isadmin'=>1])}", tab, function(data) {
+    function backup(tab, code, table) {
+        code && showmsg(table, "开始备份...(0%)");
+        $.get("{:url('admin/database/export')}", tab, function(data) {
             if (data.code) {
-                showmsg(tab.id, data.msg);
+                showmsg(data.data.table, data.msg);
                 if (!$.isPlainObject(data.data.tab)) {
                     $export.parent().children().removeClass("layui-btn-disabled");
                     $export.html("备份完成，点击重新备份");
                     window.onbeforeunload = function() { return null }
                     return;
                 }
-                backup(data.data.tab, tab.id != data.data.tab.id);
+                backup(data.data.tab, tab.id != data.data.tab.id, data.data.nexttable);
             } else {
                 layer.msg(data.msg, { icon: 5 });
                 $export.parent().children().removeClass("disabled");
@@ -118,8 +122,8 @@ layui.use(['table', 'form'], function() {
         });
     }
 
-    function showmsg(id, msg) {
-        $('.layui-table').find('tr:eq('+id+') td:eq(6)').find('div').html(msg);
+    function showmsg(table, msg) {
+        $('.layui-table').find('.table-action.table-' + table).html(msg);
     }
 
 });

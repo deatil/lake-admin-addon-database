@@ -2,7 +2,8 @@
 
 namespace app\admin\controller;
 
-use think\Db;
+use think\facade\Db;
+use think\facade\View;
 
 use app\admin\module\controller\AdminBase;
 
@@ -16,7 +17,7 @@ use app\database\lib\Database as DatabaseService;
  */
 class Database extends AdminBase
 {
-     protected $module = 'database';
+    protected $module = 'database';
     
     // 配置
     protected $databaseConfig = [];
@@ -34,7 +35,7 @@ class Database extends AdminBase
         
         $this->databaseConfig = array(
             //数据库备份根路径（路径必须以 / 结尾）
-            'path' => env('root_path') . $config['path'],
+            'path' => root_path() . $config['path'],
             //数据库备份卷大小 （该值用于限制压缩后的分卷最大长度。单位：B；建议设置20M）
             'part' => (int) $config['part'],
             //数据库备份文件是否启用压缩 （压缩备份文件需要PHP环境支持gzopen,gzwrite函数）
@@ -53,7 +54,7 @@ class Database extends AdminBase
             $result = array("code" => 0, "data" => $list);
             return json($result);
         }
-        return $this->fetch();
+        return View::fetch();
     }
 
     /**
@@ -115,19 +116,27 @@ class Database extends AdminBase
                 //下一表
                 if (isset($tables[++$id])) {
                     $tab = array('id' => $id, 'start' => 0);
-                    return $this->success('备份完成！', '', array('tab' => $tab));
+                    return $this->success('备份完成！', '', array(
+                        'tab' => $tab, 
+                        'table' => $tables[$id-1], 
+                        'nexttable' => $tables[$id]
+                    ));
                 } else {
                     //备份完成，清空缓存
                     unlink(session('backup_config.path') . 'backup.lock');
                     session('backup_tables', null);
                     session('backup_file', null);
                     session('backup_config', null);
-                    return $this->success('备份完成！');
+                    return $this->success('备份完成！', '', array('table' => $tables[$id-1]));
                 }
             } else {
                 $tab = array('id' => $id, 'start' => $start[0]);
                 $rate = floor(100 * ($start[0] / $start[1]));
-                return $this->success("正在备份...({$rate}%)", '', array('tab' => $tab));
+                return $this->success("正在备份...({$rate}%)", '', array(
+                    'tab' => $tab, 
+                    'table' => $tables[$id-1],
+                    'nexttable' => $tables[$id]
+                ));
             }
 
         } else {
@@ -175,7 +184,7 @@ class Database extends AdminBase
             $result = array("code" => 0, "data" => $list);
             return json($result);
         } else {
-            return $this->fetch('import');
+            return View::fetch('import');
         }
 
     }
@@ -196,8 +205,7 @@ class Database extends AdminBase
             $file_part = pathinfo($file);
 
             $basename = $file_part['basename'];
-            $download = new \think\response\Download($file);
-            return $download->name($basename);
+            return download($file, $basename);
         } else {
             $this->error('参数错误！');
         }

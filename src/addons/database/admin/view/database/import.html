@@ -13,17 +13,17 @@
 
 {block name="script"}
 <script type="text/html" id="toolbarDemo">
-    <div class="layui-btn-container">
-        <a class="layui-btn layui-btn-sm" href="{:url('admin/database/index')}">
-            返回数据库备份
-        </a>
-    </div>
+	<div class="layui-btn-container">
+		<a class="layui-btn layui-btn-sm" href="{:url('admin/database/index')}">
+			返回数据库备份
+		</a>
+	</div>
 </script>
 
 <script type="text/html" id="barTool">
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    <a class="layui-btn layui-btn-xs" lay-event="import">导入</a>
-    <a class="layui-btn layui-btn-xs" lay-event="down">下载</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	<a class="layui-btn layui-btn-xs" lay-event="import">导入</a>
+	<a class="layui-btn layui-btn-xs" lay-event="down">下载</a>
 </script>
 
 <script>
@@ -56,7 +56,9 @@ layui.use(['table', 'form'], function() {
         if (obj.event === 'del') {
             layer.confirm('确定删除这条数据？', { icon: 3, title: '提示' }, function(index) {
                 layer.close(index);
-                $.post('{:url("admin/database/del",["isadmin"=>1])}', { 'time': data.time }, function(data) {
+                $.post('{:url("admin/database/del")}', { 
+                    'time': data.time 
+                }, function(data) {
                     if (data.code == 1) {
                         if (data.url) {
                             layer.msg(data.msg + ' 页面即将自动跳转~');
@@ -82,10 +84,10 @@ layui.use(['table', 'form'], function() {
                 });
             })
         } else if (obj.event === 'down') {
-            window.open('{:url("admin/database/download",["isadmin"=>1])}' + "?time=" + data.time, '_self')
+            window.open('{:url("admin/database/download")}' + "?time=" + data.time, '_self')
         } else if (obj.event === 'import') {
             var self = this,
-                url = '{:url("admin/database/import",["isadmin"=>1])}' + '?time=' + data.time;
+                url = '{:url("admin/database/import")}' + '?time=' + data.time;
             layer.confirm('确定导入此条数据库吗？', { icon: 3, title: '提示' }, function(index) {
                 layer.close(index);
                 $.get(url, success, "json");

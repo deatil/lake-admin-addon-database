@@ -14,9 +14,9 @@ return [
     // 作者邮箱[选填]
     'authoremail' => 'deatil@github.com',
     // 版本号，请不要带除数字外的其他字符[必填]
-    'version' => '1.0.2',
+    'version' => '2.0.2',
     // 适配最低lake版本[必填]
-    'adaptation' => '1.0.2',
+    'adaptation' => '2.0.2',
     // 签名[必填]
     'sign' => 'b19cc279wd484c13c96c2f7142e2f437',
     
