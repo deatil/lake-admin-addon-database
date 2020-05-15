@@ -5,7 +5,7 @@ namespace app\admin\controller;
 use think\facade\Db;
 use think\facade\View;
 
-use app\admin\module\controller\AdminBase;
+use lake\module\controller\AdminBase;
 
 use app\database\lib\Database as DatabaseService;
 
@@ -27,7 +27,7 @@ class Database extends AdminBase
         parent::initialize();
         
         // 获取插件配置
-        $config = get_module_config('database');
+        $config = lake_get_module_config('database');
         
         if (empty($config)) {
             $this->error('请先进行相关配置！');
@@ -244,7 +244,7 @@ class Database extends AdminBase
             }
         } elseif (is_numeric($part) && is_numeric($start)) {
             $list = session('backup_list');
-            $db = new DatabaseService($list[$part], array('path' => realpath(config('data_backup_path')) . DIRECTORY_SEPARATOR, 'compress' => $list[$part][2]));
+            $db = new DatabaseService($list[$part], array('path' => realpath(config('app.data_backup_path')) . DIRECTORY_SEPARATOR, 'compress' => $list[$part][2]));
             $start = $db->import($start);
             if (false === $start) {
                 return $this->error('还原数据出错！');
