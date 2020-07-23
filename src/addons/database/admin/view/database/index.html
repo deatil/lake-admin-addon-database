@@ -20,16 +20,23 @@
 {block name="layui"}{/block}
 
 {block name="script"}
+<script type="text/html" id="size">
+    <div>{{ layui.utils.renderSize(d.data_length) }}</div>
+</script>
 <script type="text/html" id="info">
     <div class="table-action table-{{ d.name }}">未备份</div>
 </script>
 
 <script>
-layui.use(['table', 'form'], function() {
+layui.config({
+    base: 'admin/libs/layui-extend/'
+}).use(['table', 'form', 'utils'], function() {
     var table = layui.table,
         $ = layui.$,
         form = layui.form,
+        utils = layui.utils,
         layer = layui.layer;
+        
     table.render({
         id: 'database',
         elem: '#table',
@@ -50,6 +57,7 @@ layui.use(['table', 'form'], function() {
     var $export = $("#export"),
         $optimize = $("#optimize"),
         $repair = $("#repair");
+        
     //优化or修复
     $optimize.add($repair).click(function() {
         var self = this,

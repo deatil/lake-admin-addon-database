@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use think\facade\Db;
 use think\facade\View;
 
+use lake\File;
 use lake\module\controller\AdminBase;
 
 use app\database\lib\Database as DatabaseService;
@@ -51,8 +52,11 @@ class Database extends AdminBase
         if ($this->request->isAjax()) {
             $list = Db::query('SHOW TABLE STATUS');
             $list = array_map('array_change_key_case', $list); //全部小写
-            $result = array("code" => 0, "data" => $list);
-            return json($result);
+
+            return json([
+                "code" => 0, 
+                "data" => $list,
+            ]);
         }
         return View::fetch();
     }
