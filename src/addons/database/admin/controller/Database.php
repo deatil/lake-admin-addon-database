@@ -58,7 +58,7 @@ class Database extends AdminBase
                 "data" => $list,
             ]);
         }
-        return View::fetch();
+        return $this->fetch();
     }
 
     /**
@@ -188,7 +188,7 @@ class Database extends AdminBase
             $result = array("code" => 0, "data" => $list);
             return json($result);
         } else {
-            return View::fetch('import');
+            return $this->fetch('import');
         }
 
     }

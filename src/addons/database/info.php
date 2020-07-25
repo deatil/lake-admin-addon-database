@@ -18,7 +18,10 @@ return [
     // 适配最低lake版本[必填]
     'adaptation' => '2.0.2',
     // 签名[必填]
-    'sign' => 'b19cc279wd484c13c96c2f7142e2f437',
+    'sign' => md5('lake-addon-database'),
+    
+    // 模块地址，插件自定义包时填写
+    'path' => __DIR__,
     
     // 依赖模块
     'need_module' => [],
