@@ -91,7 +91,9 @@ layui.use(['table', 'form'], function() {
             layer.confirm('确定导入此条数据库吗？', { icon: 3, title: '提示' }, function(index) {
                 layer.close(index);
                 $.get(url, success, "json");
-                window.onbeforeunload = function() { return "正在还原数据库，请不要关闭！" }
+                window.onbeforeunload = function() { 
+                    return "正在还原数据库，请不要关闭！";
+                }
                 return false;
             });
 

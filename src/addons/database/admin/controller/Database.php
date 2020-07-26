@@ -66,40 +66,40 @@ class Database extends AdminBase
      */
     public function export()
     {
-        //表名
+        // 表名
         $tables = $this->request->param('tables/a');
-        //表ID
+        // 表ID
         $id = $this->request->param('id/d');
-        //起始行数
+        // 起始行数
         $start = $this->request->param('start/d');
         if ($this->request->isPost() && !empty($tables) && is_array($tables)) {
-            //读取备份配置
+            // 读取备份配置
             $config = $this->databaseConfig;
             if (!is_dir($config['path'])) {
                 mkdir($config['path'], 0755, true);
             }
-            //检查是否有正在执行的任务
+            // 检查是否有正在执行的任务
             $lock = "{$config['path']}backup.lock";
             if (is_file($lock)) {
                 return $this->error('检测到有一个备份任务正在执行，请稍后再试！');
             } else {
-                //创建锁文件
+                // 创建锁文件
                 file_put_contents($lock, time());
             }
-            //检查备份目录是否可写
+            // 检查备份目录是否可写
             if (!is_writeable($config['path'])) {
                 return $this->error('备份目录不存在或不可写，请检查后重试！');
             }
             session('backup_config', $config);
-            //生成备份文件信息
+            // 生成备份文件信息
             $file = array(
                 'name' => date('Ymd-His', time()),
                 'part' => 1,
             );
             session('backup_file', $file);
-            //缓存要备份的表
+            // 缓存要备份的表
             session('backup_tables', $tables);
-            //创建备份文件
+            // 创建备份文件
             $Database = new DatabaseService($file, $config);
             if (false !== $Database->create()) {
                 $tab = array('id' => 0, 'start' => 0);
@@ -108,16 +108,16 @@ class Database extends AdminBase
                 return $this->error('初始化失败，备份文件创建失败！');
             }
         } elseif ($this->request->isGet() && is_numeric($id) && is_numeric($start)) {
-            //备份数据
+            // 备份数据
             $tables = session('backup_tables');
-            //备份指定表
+            // 备份指定表
             $Database = new DatabaseService(session('backup_file'), session('backup_config'));
             $start = $Database->backup($tables[$id], $start);
             if (false === $start) {
-                //出错
+                // 出错
                 return $this->error('备份出错！');
             } elseif (0 === $start) {
-                //下一表
+                // 下一表
                 if (isset($tables[++$id])) {
                     $tab = array('id' => $id, 'start' => 0);
                     return $this->success('备份完成！', '', array(
@@ -126,7 +126,7 @@ class Database extends AdminBase
                         'nexttable' => $tables[$id]
                     ));
                 } else {
-                    //备份完成，清空缓存
+                    // 备份完成，清空缓存
                     unlink(session('backup_config.path') . 'backup.lock');
                     session('backup_tables', null);
                     session('backup_file', null);
@@ -138,8 +138,8 @@ class Database extends AdminBase
                 $rate = floor(100 * ($start[0] / $start[1]));
                 return $this->success("正在备份...({$rate}%)", '', array(
                     'tab' => $tab, 
-                    'table' => $tables[$id-1],
-                    'nexttable' => $tables[$id]
+                    'table' => $tables[$id],
+                    'nexttable' => $tables[$id+1]
                 ));
             }
 
@@ -149,7 +149,7 @@ class Database extends AdminBase
 
     }
 
-    //备份恢复
+    // 备份恢复
     public function restore()
     {
         if ($this->request->isAjax()) {

@@ -79,7 +79,8 @@ layui.config({
         }, "json");
         return false;
     });
-    //提交备份
+    
+    // 提交备份
     $export.click(function() {
         var checkStatus = table.checkStatus('database');
         if (checkStatus.data.length <= 0) {
