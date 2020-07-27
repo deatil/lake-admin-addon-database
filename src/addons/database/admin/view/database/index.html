@@ -5,14 +5,6 @@
     <div class="layui-card-header layui-bg-cyan">数据库备份</div>
     <div class="layui-card-body">
         <table class="layui-hide" id="table" lay-filter="table"></table>
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <a class="layui-btn layui-btn-sm" id="export">立即备份</a>
-                <a class="layui-btn layui-btn-sm" id="optimize" href="{:url('admin/database/optimize',['isadmin'=>1])}">优化表</a>
-                <a class="layui-btn layui-btn-sm" id="repair" href="{:url('admin/database/repair',['isadmin'=>1])}">修复表</a>
-                <a class="layui-btn layui-btn-sm layui-btn-normal" href="{:url('admin/database/restore',['isadmin'=>1])}">数据库还原</a>
-              </div>
-        </script>
     </div>
 </div>
 {/block}
@@ -20,6 +12,15 @@
 {block name="layui"}{/block}
 
 {block name="script"}
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-sm" id="export">立即备份</a>
+        <a class="layui-btn layui-btn-sm" id="optimize" href="{:url('admin/database/optimize',['isadmin'=>1])}">优化表</a>
+        <a class="layui-btn layui-btn-sm" id="repair" href="{:url('admin/database/repair',['isadmin'=>1])}">修复表</a>
+        <a class="layui-btn layui-btn-sm layui-btn-normal" href="{:url('admin/database/restore',['isadmin'=>1])}">数据库还原</a>
+      </div>
+</script>
+
 <script type="text/html" id="size">
     <div>{{ layui.utils.renderSize(d.data_length) }}</div>
 </script>
@@ -40,7 +41,7 @@ layui.config({
     table.render({
         id: 'database',
         elem: '#table',
-        toolbar: '#toolbarDemo',
+        toolbar: '#toolbar',
         url: '{:url("admin/database/index",["isadmin"=>1])}',
         cols: [
             [
@@ -54,9 +55,11 @@ layui.config({
             ]
         ],
     });
+    
     var $export = $("#export"),
         $optimize = $("#optimize"),
-        $repair = $("#repair");
+        $repair = $("#repair"),
+        tables;
         
     //优化or修复
     $optimize.add($repair).click(function() {
@@ -87,18 +90,22 @@ layui.config({
             layer.msg("请选择需要备份的数据");
             return false;
         }
+
         var a = [];
         $(checkStatus.data).each(function(i, o) {
             a.push(o.name);
         });
+        
+        tables = a;
+        
         $export.parent().children().addClass("layui-btn-disabled");
         $export.html("<i class='icon iconfont icon-fasong'></i>正在发送备份请求...");
-        $.post("{:url('admin/database/export')}", { tables: a },
-            function(data) {
+        $.post("{:url('admin/database/export')}", { 
+            tables: a 
+        }, function(data) {
                 if (data.code) {
-                    tables = data.data.tables;
                     $export.html(data.msg + "开始备份，请不要关闭本页面！");
-                    backup(data.data.tab, 1, tables[0]);
+                    backup(data.data.tab);
                     window.onbeforeunload = function() { return "正在备份数据库，请不要关闭！" }
                 } else {
                     layer.msg(data.msg, { icon: 5 });
@@ -111,18 +118,18 @@ layui.config({
         return false;
     });
 
-    function backup(tab, code, table) {
-        code && showmsg(table, "开始备份...(0%)");
+    function backup(tab, code) {
+        code && showmsg(tab.id, "开始备份...(0%)");
         $.get("{:url('admin/database/export')}", tab, function(data) {
             if (data.code) {
-                showmsg(data.data.table, data.msg);
+                showmsg(tab.id, data.msg);
                 if (!$.isPlainObject(data.data.tab)) {
                     $export.parent().children().removeClass("layui-btn-disabled");
                     $export.html("备份完成，点击重新备份");
                     window.onbeforeunload = function() { return null }
                     return;
                 }
-                backup(data.data.tab, tab.id != data.data.tab.id, data.data.nexttable);
+                backup(data.data.tab, tab.id != data.data.tab.id);
             } else {
                 layer.msg(data.msg, { icon: 5 });
                 $export.parent().children().removeClass("disabled");
@@ -130,9 +137,9 @@ layui.config({
             }
         });
     }
-
-    function showmsg(table, msg) {
-        $('.layui-table').find('.table-action.table-' + table).html(msg);
+    
+    function showmsg(table_id, msg) {
+        $('.layui-table').find('.table-action.table-' + tables[table_id]).html(msg);
     }
 
 });

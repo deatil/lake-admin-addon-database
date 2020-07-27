@@ -12,12 +12,16 @@
 {block name="layui"}{/block}
 
 {block name="script"}
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class="layui-btn-container">
         <a class="layui-btn layui-btn-sm" href="{:url('admin/database/index')}">
             返回数据库备份
         </a>
     </div>
+</script>
+
+<script type="text/html" id="statusTool">
+    <div class="lake-admin-database-import-tip">-</div>
 </script>
 
 <script type="text/html" id="barTool">
@@ -35,16 +39,16 @@ layui.use(['table', 'form'], function() {
     table.render({
         id: 'database',
         elem: '#table',
-        toolbar: '#toolbarDemo',
+        toolbar: '#toolbar',
         url: '{:url("admin/database/restore",["isadmin"=>1])}',
         cols: [
             [
                 { field: 'title', width: 250, title: '备份名称' },
-                { field: 'date', width: 250, title: '备份时间' },
+                { field: 'date', width: 170, title: '备份时间' },
                 { field: 'size', width: 120, title: '备份大小' },
-                { field: 'part', width: 200, title: '卷数' },
+                { field: 'part', width: 60, title: '卷数' },
                 { field: 'compress', title: '压缩' },
-                { field: '', width: 120, title: '状态', templet: '<div>-</div>' },
+                { field: '', width: 130, title: '状态', templet: '#statusTool' },
                 { fixed: 'right', width: 160, title: '操作', toolbar: '#barTool' }
             ]
         ],
@@ -88,8 +92,10 @@ layui.use(['table', 'form'], function() {
         } else if (obj.event === 'import') {
             var self = this,
                 url = '{:url("admin/database/import")}' + '?time=' + data.time;
+            
             layer.confirm('确定导入此条数据库吗？', { icon: 3, title: '提示' }, function(index) {
                 layer.close(index);
+                
                 $.get(url, success, "json");
                 window.onbeforeunload = function() { 
                     return "正在还原数据库，请不要关闭！";
@@ -107,8 +113,7 @@ layui.use(['table', 'form'], function() {
                             code += ".";
                         }
                     }
-                    $(self).parents('tr').find('td:eq(5)').find('div').text(res.msg);
-                    //$(self).parent().prev().text(res.info);
+                    $(self).parents('tr').find('.lake-admin-database-import-tip').text(res.msg);
                     if (res.data.part) {
                         $.get(url, { "part": res.data.part, "start": res.data.start },
                             success,
@@ -118,7 +123,7 @@ layui.use(['table', 'form'], function() {
                         window.onbeforeunload = function() { return null; }
                     }
                 } else {
-                    $(self).parents('tr').find('td:eq(5)').find('div').text(res.msg);
+                    $(self).parents('tr').find('.lake-admin-database-import-tip').text(res.msg);
                 }
             }
         }
