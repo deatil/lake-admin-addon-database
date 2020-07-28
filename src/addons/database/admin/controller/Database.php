@@ -3,7 +3,6 @@
 namespace app\admin\controller;
 
 use think\facade\Db;
-use think\facade\View;
 
 use lake\File;
 use lake\module\controller\AdminBase;

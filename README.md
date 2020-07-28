@@ -13,6 +13,6 @@
 
 ## 使用方法 
 
-*  正确安装了lake-admin后台
-*  composer require lake/lake-admin-addon-database，然后选择最新版本
+*  正确安装了 `lake-admin` 后台
+*  `composer require lake/lake-admin-addon-database`，然后选择最新版本
 *  进入后台安装该模块
