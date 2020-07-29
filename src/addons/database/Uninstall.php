@@ -1,8 +1,8 @@
 <?php
 
-namespace app\database\install;
+namespace app\database;
 
-class install
+class Uninstall
 {
     /**
      * 开始执行
