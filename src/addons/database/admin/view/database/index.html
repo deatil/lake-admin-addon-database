@@ -9,15 +9,13 @@
 </div>
 {/block}
 
-{block name="layui"}{/block}
-
 {block name="script"}
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
-        <a class="layui-btn layui-btn-sm" id="export">立即备份</a>
-        <a class="layui-btn layui-btn-sm" id="optimize" href="{:url('admin/database/optimize',['isadmin'=>1])}">优化表</a>
-        <a class="layui-btn layui-btn-sm" id="repair" href="{:url('admin/database/repair',['isadmin'=>1])}">修复表</a>
-        <a class="layui-btn layui-btn-sm layui-btn-normal" href="{:url('admin/database/restore',['isadmin'=>1])}">数据库还原</a>
+        <a class="layui-btn layui-btn-sm" id="export" href="{:url('admin/database/export')}">立即备份</a>
+        <a class="layui-btn layui-btn-sm" id="optimize" href="{:url('admin/database/optimize')}">优化表</a>
+        <a class="layui-btn layui-btn-sm" id="repair" href="{:url('admin/database/repair')}">修复表</a>
+        <a class="layui-btn layui-btn-sm layui-btn-normal layui-iframe" title="数据库还原" href="{:url('admin/database/restore')}">数据库还原</a>
       </div>
 </script>
 
@@ -29,9 +27,7 @@
 </script>
 
 <script>
-layui.config({
-    base: 'admin/libs/layui-extend/'
-}).use(['table', 'form', 'utils'], function() {
+layui.use(['table', 'form', 'utils'], function() {
     var table = layui.table,
         $ = layui.$,
         form = layui.form,
@@ -42,7 +38,7 @@ layui.config({
         id: 'database',
         elem: '#table',
         toolbar: '#toolbar',
-        url: '{:url("admin/database/index",["isadmin"=>1])}',
+        url: '{:url("admin/database/index")}',
         cols: [
             [
                 { type: 'checkbox', fixed: 'left' },
@@ -60,6 +56,7 @@ layui.config({
         $optimize = $("#optimize"),
         $repair = $("#repair"),
         tables;
+    var export_url = $export.attr('href');
         
     //优化or修复
     $optimize.add($repair).click(function() {
@@ -100,7 +97,7 @@ layui.config({
         
         $export.parent().children().addClass("layui-btn-disabled");
         $export.html("<i class='icon iconfont icon-fasong'></i>正在发送备份请求...");
-        $.post("{:url('admin/database/export')}", { 
+        $.post(export_url, { 
             tables: a 
         }, function(data) {
                 if (data.code) {
@@ -120,7 +117,7 @@ layui.config({
 
     function backup(tab, code) {
         code && showmsg(tab.id, "开始备份...(0%)");
-        $.get("{:url('admin/database/export')}", tab, function(data) {
+        $.get(export_url, tab, function(data) {
             if (data.code) {
                 showmsg(tab.id, data.msg);
                 if (!$.isPlainObject(data.data.tab)) {
