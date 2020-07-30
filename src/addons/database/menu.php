@@ -3,7 +3,7 @@ return [
     [
         "route" => "admin/database/index",
         "method" => "GET",
-        "type" => 2,
+        "type" => 1,
         "is_menu" => 1,
         "title" => "数据库备份",
         "icon" => "icon-bangzhushouce",
@@ -13,7 +13,7 @@ return [
             [
                 "route" => "admin/database/index",
                 "method" => "GET",
-                "type" => 2,
+                "type" => 1,
                 "is_menu" => 1,
                 "title" => "数据库备份",
                 "icon" => "icon-bangzhushouce",
