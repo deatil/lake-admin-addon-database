@@ -17,30 +17,8 @@ return [
                 "is_menu" => 1,
                 "title" => "数据库备份",
                 "icon" => "icon-bangzhushouce",
+                "listorder" => 5,
                 "child" => [
-                    [
-                        "route" => "admin/database/restore",
-                        "method" => "GET",
-                        "type" => 1,
-                        "is_menu" => 0,
-                        "title" => "备份还原",
-                        "child" => [
-                            [
-                                "route" => "admin/database/restore",
-                                "method" => "POST",
-                                "type" => 1,
-                                "is_menu" => 0,
-                                "title" => "备份数据库",
-                            ]
-                        ],
-                    ],
-                    [
-                        "route" => "admin/database/del",
-                        "method" => "POST",
-                        "type" => 1,
-                        "is_menu" => 0,
-                        "title" => "删除备份",
-                    ],
                     [
                         "route" => "admin/database/repair",
                         "method" => "POST",
@@ -78,6 +56,40 @@ return [
                             ]
                         ],
                     ],
+                ],
+            ],
+            [
+                "route" => "admin/database/restore",
+                "method" => "GET",
+                "type" => 1,
+                "is_menu" => 1,
+                "title" => "数据库还原",
+                "icon" => "icon-undo",
+                "listorder" => 10,
+                "child" => [
+                    [
+                        "route" => "admin/database/restore",
+                        "method" => "GET",
+                        "type" => 1,
+                        "is_menu" => 0,
+                        "title" => "数据库还原",
+                        "child" => [
+                            [
+                                "route" => "admin/database/restore",
+                                "method" => "POST",
+                                "type" => 1,
+                                "is_menu" => 0,
+                                "title" => "备份数据库",
+                            ]
+                        ],
+                    ],
+                    [
+                        "route" => "admin/database/del",
+                        "method" => "POST",
+                        "type" => 1,
+                        "is_menu" => 0,
+                        "title" => "删除备份",
+                    ],
                     [
                         "route" => "admin/database/download",
                         "method" => "GET",
@@ -87,7 +99,6 @@ return [
                     ],
                 ],
             ],
-
         ],
     ],
 ];

@@ -77,12 +77,26 @@ class Database
      */
     public function create()
     {
+        $db = \think\facade\Db::connect();
+        $result = $db->query("select SUBSTRING_INDEX(host,':',1) as ip , count(*) from information_schema.processlist group by ip;");
+        $ip = $result['0']['ip'];
+        
+        $result1 = $db->query("show global variables like 'port';");
+        $port = $result1['0']['Value'];
+        
+        $result2 = $db->query("select database() as name;");
+        $database = $result2['0']['name'];
+        
+        $result3 = $db->query("select version() as version;");
+        $version = $result3['0']['version'];
+        
         $sql = "-- -----------------------------\n";
-        $sql .= "-- lake MySQL Data Transfer \n";
+        $sql .= "-- LakeAdmin MySQL Data Transfer \n";
         $sql .= "-- \n";
-        $sql .= "-- Host     : " . config('database.hostname') . "\n";
-        $sql .= "-- Port     : " . config('database.hostport') . "\n";
-        $sql .= "-- Database : " . config('database.database') . "\n";
+        $sql .= "-- Host     : " . $ip . "\n";
+        $sql .= "-- Port     : " . $port . "\n";
+        $sql .= "-- Database : " . $database . "\n";
+        $sql .= "-- Version  : " . $version . "\n";
         $sql .= "-- \n";
         $sql .= "-- Part : #{$this->file['part']}\n";
         $sql .= "-- Date : " . date("Y-m-d H:i:s") . "\n";
