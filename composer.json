@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "app\\database\\": "src/addons/database"
+            "app\\database\\": "src/addon/database"
         },
         "files": [
         ]
