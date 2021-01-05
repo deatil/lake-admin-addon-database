@@ -4,9 +4,9 @@ return [
     // 模块ID[必填]
     'module' => 'database',
     // 模块名称[必填]
-    'name' => '数据库备份',
+    'name' => '数据库管理',
     // 模块简介[选填]
-    'introduce' => '简单的数据库备份',
+    'introduce' => '简单的数据库备份管理',
     // 模块作者[选填]
     'author' => 'deatil',
     // 作者地址[选填]
@@ -14,7 +14,7 @@ return [
     // 作者邮箱[选填]
     'authoremail' => 'deatil@github.com',
     // 版本号，请不要带除数字外的其他字符[必填]
-    'version' => '2.0.6',
+    'version' => '2.0.7',
     // 适配最低lake版本[必填]
     'adaptation' => '2.0.2',
     // 签名[必填]

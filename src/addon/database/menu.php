@@ -5,7 +5,7 @@ return [
         "method" => "GET",
         "type" => 1,
         "is_menu" => 1,
-        "title" => "数据库备份",
+        "title" => "数据库管理",
         "icon" => "icon-bangzhushouce",
         "tip" => "",
         "listorder" => 100,
