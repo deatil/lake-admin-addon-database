@@ -1,26 +1,15 @@
 <?php
 
 return [
-    // 模块ID[必填]
     'module' => 'database',
-    // 模块名称[必填]
     'name' => '数据库管理',
-    // 模块简介[选填]
-    'introduce' => '简单的数据库备份管理',
-    // 模块作者[选填]
+    'introduce' => '数据库备份、优化、修复及还原',
     'author' => 'deatil',
-    // 作者地址[选填]
     'authorsite' => 'http://github.com/deatil',
-    // 作者邮箱[选填]
     'authoremail' => 'deatil@github.com',
-    // 版本号，请不要带除数字外的其他字符[必填]
     'version' => '2.0.7',
-    // 适配最低lake版本[必填]
     'adaptation' => '2.0.2',
-    // 签名[必填]
-    'sign' => md5('lake-addon-database'),
     
-    // 模块地址，插件自定义包时填写
     'path' => __DIR__,
     
     // 依赖模块
@@ -28,11 +17,11 @@ return [
     
     // 设置
     'setting' => [
-        'path' => [ //配置在表单中的键名 ,这个会是config[title]
-            'title' => '数据库备份路径', //表单的文字
-            'type' => 'text', //表单的类型：text、textarea、checkbox、radio、select等
-            'value' => '/data/', //表单的默认值
-            'style' => "width:200px;", //表单样式
+        'path' => [ 
+            'title' => '数据库备份路径', 
+            'type' => 'text', 
+            'value' => '/data/', 
+            'style' => "width:200px;", 
             'tips' => '路径必须以 / 结尾',
         ],
         'part' => [
@@ -65,15 +54,9 @@ return [
         ],
     ],
     
-    // 菜单
     'menus' => include __DIR__ . '/menu.php',
     
-    // 事件
     'event' => [],
     
-    // 数据表，请加表前缀pre__[有数据库表时必填]
-    'tables' => [],
-    
-    // 演示数据文件。比如：demo.sql，文件位于install根目录
     'demo' => '',
 ];
