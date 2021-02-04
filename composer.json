@@ -10,7 +10,7 @@
         "addon",
         "database"
     ],
-    "homepage": "https://github.com/deatil",
+    "homepage": "https://github.com/deatil/lake-admin-addon-database",
     "authors": [
         {
             "name": "deatil",
@@ -24,13 +24,13 @@
     },
     "autoload": {
         "psr-4": {
-            "app\\database\\": "src/addon/database"
+            "app\\database\\": ""
         }
     },
     "extra": {
         "think":{
             "services":[
-                "app\\database\\boot\\Service"
+                "app\\database\\Service"
             ]
         }
     }

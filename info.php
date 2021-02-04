@@ -7,8 +7,8 @@ return [
     'author' => 'deatil',
     'authorsite' => 'http://github.com/deatil',
     'authoremail' => 'deatil@github.com',
-    'version' => '2.0.7',
-    'adaptation' => '2.0.2',
+    'version' => '2.0.8',
+    'adaptation' => '2.3.27',
     
     'path' => __DIR__,
     
