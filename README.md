@@ -12,7 +12,7 @@
 *  composer安装
     * `composer require lake/lake-admin-addon-database`
 *  本地安装
-    * 后台 `本地模块->模块管理->本地安装` 上传模块或者手动将模块上传到 `/addonaddon` 目录
+    * 后台 `本地模块->模块管理->本地安装` 上传模块或者手动将模块上传到 `/addon` 目录
     * 手动放置模块或者上传模块请确保目录为 `database/Service.php`
 *  最后在 `本地模块->模块管理->全部` 安装添加的模块
 *  注意：数据库还原请不要授权给`非超级管理员`账号
